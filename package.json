@@ -1,0 +1,19 @@
+{
+  "name": "transformer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "esbuild src/index.js --bundle --outfile=dist/bundle.js --loader:.html=text",
+    "watch":"node build.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.19.3"
+  },
+  "dependencies": {
+    "@xenova/transformers": "^2.6.0"
+  }
+}
