@@ -1,5 +1,11 @@
 import { pipeline, env } from "../transformer/js/transformers.js";
 
+// Specify a custom location for models (defaults to '/models/').
+// env.localModelPath = '../../models/';
+
+// Disable the loading of remote models from the Hugging Face Hub:
+// env.allowRemoteModels = false;
+
 env.backends.onnx.wasm.wasmPaths = '../transformer/wasm/';
 
 class TranslationPipeline {
@@ -28,25 +34,26 @@ self.addEventListener('message', async (event) => {
           postMessage(x);
         }
   });
+
   const data = event.data;
+  if (data.type !== 'init') {
+    // Actually perform the translation
+    let output = await translator(data.text, {
+      tgt_lang: data.targetLanguage,
+      src_lang: data.sourceLanguage,
 
-  // Actually perform the translation
-  let output = await translator(data.text, {
-    tgt_lang: data.targetLanguage,
-    src_lang: data.sourceLanguage,
-
-    // Allows for partial output
-    // callback_function: x => {
-    //   postMessage({
-    //     status: 'update',
-    //     output: translator.tokenizer.decode(x[0].output_token_ids, { skip_special_tokens: true })
-    //   });
-    // }
-  });
-
-   // Send the output back to the main thread
-  postMessage({
-    status: 'complete',
-    output: output,
-  });
+      // Allows for partial output
+      // callback_function: x => {
+      //   postMessage({
+      //     status: 'update',
+      //     output: translator.tokenizer.decode(x[0].output_token_ids, { skip_special_tokens: true })
+      //   });
+      // }
+    });
+    // Send the output back to the main thread
+    postMessage({
+      status: 'complete',
+      output: {label: data.label, translation: output, language: data.targetLanguage},
+    });
+  }
 });
