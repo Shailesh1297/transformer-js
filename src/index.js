@@ -1,46 +1,59 @@
 import { LANGUAGES, LANGUAGE_MODELS } from "./constants";
-import { Translator } from "./translate";
-import { sample } from "./sample";
 
-let translated = {};
-
-//test
-const model = 'Helsinki-NLP/opus-mt-en-hi';
-
-console.log("--start--");
-let translator = new Translator(model);
-document.addEventListener('translaterInitialized', (e) => {
-    let pre = Object.values(sample);
-    const timer = elapsedTimer();
-    translator.source = LANGUAGES[translator.model].english;
-    translator.target = LANGUAGES[translator.model].hindi;
-    translator.translate(pre)
-    .then(res => {
-        timer();
-        console.log(res);
-        // translated = {...res};
-    })
-})
-
-//
+//elements
 const sourceDiv = document.getElementById("translationSource");
 const targetDiv = document.getElementById("translationTarget");
 const sourceSelector = document.getElementById("sourceLanguage");
 const targetSelector = document.getElementById("targetLanguage");
 const modelSelector = document.getElementById("modelSelector");
+const loader = document.getElementById("ui-loader");
+const content = document.getElementById("content");
+
+function showSpinner() {
+  content.classList.add('pe-none','blur');
+  loader.classList.remove('d-none');
+}
+
+function hideSpinner() {
+  content.classList.remove('pe-none','blur');
+  loader.classList.add('d-none');
+}
+
+window.onload = function(){
+   showSpinner();
+}
+
+const myWorker = new Worker("worker/translator.js",{type:'module'});
+myWorker.onmessage = (event)=> {
+  const message = event.data;
+  console.log(message);
+  if (message.status === 'ready') {
+    hideSpinner();
+  } else {
+    targetDiv.value = message.output[0].translation_text;
+  }
+}
+
+myWorker.postMessage({text: 'Click the button to open modal',sourceLanguage:"eng_Latn",targetLanguage:'hin_Deva'});
+
+
+
 
 modelSelector.addEventListener('change', (event) => {
-    translator = new Translator(event.target.value);
+    // translator = new Translator(event.target.value);
 })
 
+
+
 function setSelectorValues() {
-    for(let key of Object.keys(LANGUAGES[translator.model])) {
-        sourceSelector.appendChild(createOptionNode(key,LANGUAGES[translator.model][key]));
-        targetSelector.appendChild(createOptionNode(key,LANGUAGES[translator.model][key]));
+  const model = "Xenova/nllb-200-distilled-600M";
+    for(let key of Object.keys(LANGUAGES[LANGUAGE_MODELS[model]])) {
+        sourceSelector.appendChild(createOptionNode(key,LANGUAGES[model][key]));
+        targetSelector.appendChild(createOptionNode(key,LANGUAGES[model][key]));
     }
 
-    for(let model of Object.keys(LANGUAGE_MODELS)) {
-        modelSelector.appendChild(createOptionNode(model,LANGUAGE_MODELS[model]));
+    for(let lmodel of Object.keys(LANGUAGE_MODELS)) {
+        modelSelector.appendChild(createOptionNode(lmodel,LANGUAGE_MODELS[lmodel]));
     }
 }
 
@@ -65,16 +78,7 @@ function translate() {
         const srcLang = sourceSelector.value;
         const tarLang = targetSelector.value;
         console.log(srcLang,'--->',tarLang);
-        translator.source = srcLang;
-        translator.target = tarLang;
-        let timer = elapsedTimer();
-        translator.translate(sourceDiv.value)
-            .then(data => {
-                timer();
-                console.log(data);
-                targetDiv.value = data[0].translation_text;
-
-            })
+        myWorker.postMessage({text: source,sourceLanguage: srcLang, targetLanguage: tarLang});
     } else {
         targetDiv.value = '';
     }
