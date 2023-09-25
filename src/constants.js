@@ -229,3 +229,19 @@ export const LANGUAGE_MODELS = {
     'Xenova/mbart-large-50-many-to-many-mmt': 'Xenova/mbart-large-50-many-to-many-mmt',
     'Helsinki-NLP/opus-mt-en-hi': 'Helsinki-NLP/opus-mt-en-hi'
 }
+
+export const MSB_LANGUAGES = [
+  // {key: "English",value: "eng_Latn"},
+  {key: "Hindi", value: "hin_Deva"},
+  {key:"Chinese", value: "zho_Hant"},
+  {key:"Arabic", value: "ace_Arab"},
+  {key:"French", value: "fra_Latn"},
+  {key:"Spanish", value: "spa_Latn"},
+  {key:"German", value: "deu_Latn"},
+  {key:"Dutch", value: "nld_Latn"},
+  {key:"Russian", value: "rus_Cyrl"},
+  {key:"Bulgarian", value: "bul_Cyrl"},
+  {key:"Romanian", value: "ron_Latn"},
+  {key:"Portuguese", value: "por_Latn"},
+  {key:"Italian", value: "ita_Latn"}
+];

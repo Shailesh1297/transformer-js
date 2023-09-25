@@ -20,13 +20,14 @@ export class Flyway {
     this.translations = translations;
   }
 
-  createFlyways() {
+  createFlyways(type='UPDATE',bundle='common') {
+    console.log(type,'-->',bundle);
     let data = '';
     Object.keys(this.translations).forEach(lkey => {
-      const sqlBuilder = new SqlBuilder('SET', 'common', this.languageLocaleMap[lkey]);
+      const sqlBuilder = new SqlBuilder(type, bundle, this.languageLocaleMap[lkey]);
       const labelValueObj = this.translations[lkey];
-      Object.keys(labelValueObj).forEach(lbl => {
-        sqlBuilder.addLabelValue(lbl, labelValueObj[lbl]);
+      Object.keys(labelValueObj).forEach((lbl,idx,lvoKeys) => {
+        sqlBuilder.addLabelValue(lbl, labelValueObj[lbl], lvoKeys.length != (idx + 1));
       });
       data += `${sqlBuilder.build()}\n`;
     });
