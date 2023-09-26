@@ -23,8 +23,16 @@ const title = document.getElementById("flyway-title");
 
 //title underscore handle
 function flywayName() {
+  return `V4_${getDateTime()}__${userInitial.value}_${flywayTitle()}`;
+}
+
+function flywayTitle() {
+  return title.value.replace(' ','_');
+}
+
+function getDateTime() {
   const date = new Date();
-  return `V4_${date.getFullYear()}${(date.getMonth()+1).toString().padStart(2,"0")}${date.getDate().toString().padStart(2,"0")}.${date.getHours().toString().padStart(2,"0")}${date.getMinutes().toString().padStart(2,"0")}__${userInitial.value}_${title.value}`;
+  return `${date.getFullYear()}${(date.getMonth()+1).toString().padStart(2,"0")}${date.getDate().toString().padStart(2,"0")}.${date.getHours().toString().padStart(2,"0")}${date.getMinutes().toString().padStart(2,"0")}`;
 }
 
 
@@ -75,15 +83,7 @@ function initWorker() {
           //last progress item
           percent = (100 / progress.maxValue()) + progress.currentValue();
           progress.update(percent);
-
-          //to complete progress rendering
-          setTimeout(() => {
-            progress.hide();
-            const fy = new Flyway(translations);
-            const data = fy.createFlyways(type.value,bundle.value);
-            targetDiv.value = data;
-            modal.show();
-          }, 500);
+          completeTranslation();
         }
       }
     }
@@ -140,6 +140,17 @@ function translate() {
     toast.show('Please provide JSON value');
     console.log(e);
   }
+}
+
+function completeTranslation() {
+ //to complete progress rendering
+  setTimeout(() => {
+    progress.hide();
+    const fy = new Flyway(translations);
+    const data = fy.createFlyways(type.value,bundle.value);
+    targetDiv.value = data;
+    modal.show();
+  }, 500);
 }
 
 

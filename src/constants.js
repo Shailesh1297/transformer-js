@@ -7,11 +7,6 @@ export const LANGUAGES = {
         arabic: "ar"
     },
     'Xenova/nllb-200-distilled-600M': {
-        // english: "eng_Latn",
-        // hindi: "hin_Deva",
-        // french: "fra_Latn",
-        // chinese: "zho_Hant",
-        // arabic: "arb_Arab",
         "Acehnese (Arabic script)": "ace_Arab",
         "Acehnese (Latin script)": "ace_Latn",
         "Afrikaans": "afr_Latn",
