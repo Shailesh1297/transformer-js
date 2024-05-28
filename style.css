@@ -2,6 +2,18 @@
   opacity: 0.5;
 }
 
+.translate {
+  font: italic 1rem serif;
+  fill:#104CBA;
+  font-weight: bold;
+}
+
+.translate-header {
+  font: italic 2rem serif;
+  fill:#104CBA;
+  font-weight: bold;
+}
+
 /**
   loader
 **/
