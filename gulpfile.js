@@ -7,27 +7,27 @@ function js() {
         outfile: 'index.js',
         bundle: true,
     }))
-  .pipe(dest('dist/'));
+  .pipe(dest('docs/'));
 }
 
 function css() {
   return src('style.css')
-    .pipe(dest('dist/'));
+    .pipe(dest('docs/'));
 }
 
 function copy_html() {
   return src('index.html')
-  .pipe(dest('dist/'))
+  .pipe(dest('docs/'))
 }
 
 function copy_worker() {
   return src('src/worker/**/*')
-  .pipe(dest('dist/worker/'))
+  .pipe(dest('docs/worker/'))
 }
 
 function copy_transformers() {
   return src('src/transformer/**/*')
-    .pipe(dest('dist/transformer/'))
+    .pipe(dest('docs/transformer/'))
 }
 
 

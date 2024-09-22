@@ -27,7 +27,7 @@ function flywayName() {
 }
 
 function flywayTitle() {
-  return title.value.replace(' ','_');
+  return title.value.replaceAll(' ','_');
 }
 
 function getDateTime() {
