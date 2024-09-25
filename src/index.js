@@ -57,6 +57,7 @@ window.onload = function(){
   spinner = new Spinner();
   spinner.show();
   initWorker();
+  document.getElementById('selectAllLang').addEventListener('click', toggleAllLanguages);
 }
 
 function initWorker() {
@@ -93,6 +94,14 @@ function initWorker() {
   worker.postMessage({type: 'init'});
 }
 
+function toggleAllLanguages(event) {
+  const langCheckBoxes = document.querySelectorAll('#language-options input');
+  if (event.target.checked) {
+    langCheckBoxes.forEach(checkBox => checkBox.checked = true);
+  } else {
+    langCheckBoxes.forEach(checkBox => checkBox.checked = false);
+  }
+}
 
 //event listeners
 translateBtn.addEventListener('click', (event) => {

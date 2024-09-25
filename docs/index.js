@@ -558,6 +558,7 @@
     spinner = new Spinner();
     spinner.show();
     initWorker();
+    document.getElementById("selectAllLang").addEventListener("click", toggleAllLanguages);
   };
   function initWorker() {
     worker = new Worker("worker/translator.js", { type: "module" });
@@ -588,6 +589,14 @@
       }
     };
     worker.postMessage({ type: "init" });
+  }
+  function toggleAllLanguages(event) {
+    const langCheckBoxes = document.querySelectorAll("#language-options input");
+    if (event.target.checked) {
+      langCheckBoxes.forEach((checkBox) => checkBox.checked = true);
+    } else {
+      langCheckBoxes.forEach((checkBox) => checkBox.checked = false);
+    }
   }
   translateBtn.addEventListener("click", (event) => {
     translate();
